@@ -1,0 +1,94 @@
+unit contenedor;
+interface
+ uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+
+  type
+  DatosSocio=record
+    DNI:String[12];
+    Nombre:String[20];
+    Apellido:String[50];
+    Direccion:String[50];
+    Telefono:String[10];
+    AnoIngreso:word;
+    PagoCuota:boolean;
+  end;
+  function insertar(ficha:DatosSocio):integer;
+   procedure crear;
+   procedure abrir;
+   function TotalSocios:integer;
+   function BuscarSocio(NumSocio:integer;var ficha:DatosSocio):boolean;
+   function BuscarDNI(dni:string;var ficha:DatosSocio):integer;
+   procedure cerrar;
+  var
+  agenda:array[1..10]of DatosSocio;
+  fichero:file of DatosSocio;
+  reg:DatosSocio;
+  indice:integer;
+implementation
+    procedure crear;
+    begin
+       AssignFile(fichero,'Socios.dat');
+       rewrite(fichero); //abrir para escritura machacando
+    end;
+    procedure abrir;
+    begin
+       AssignFile(fichero,'Socios.dat');
+       if not(FileExists('Socios.dat')) then
+            rewrite(fichero)
+       else
+          reset(fichero); //abrir lectura y escritura
+    end;
+    function TotalSocios:integer;
+    begin
+      TotalSocios:=filesize(fichero);  //devuelve el tamaño del fichero
+    end;
+    function insertar(ficha:DatosSocio):integer;
+    var
+     NumeroFicha:integer;
+    begin
+       NumeroFicha:=TotalSocios;
+       seek(fichero,NumeroFicha); //posicionarse al final del fichero
+       write(fichero,ficha); //escribe en el fichero
+       insertar:=NumeroFicha;
+    end;
+    function BuscarSocio(NumSocio:integer;var ficha:DatosSocio):boolean;
+    begin
+       if((NumSocio<=TotalSocios)and(NumSocio>=0))then
+       begin
+         seek(fichero,NumSocio);
+         read(fichero,ficha); //Leer fichero y almacenar en ficha
+         BuscarSocio:=true;
+       end
+       else
+         BuscarSocio:=false;
+    end;
+    function BuscarDNI(dni:string;var ficha:DatosSocio):integer;
+    var
+     i,fin:integer;
+     encontrado:boolean;
+    begin
+      fin:=TotalSocios-1;
+      encontrado:=false;
+      BuscarDNI:=-1;
+      i:=0;
+      while ((not eof(fichero))and(i<=fin)and(not encontrado)) do
+      begin
+         seek(fichero,i);
+         read(fichero,ficha);
+         if (ficha.DNI=dni) then
+           begin
+             encontrado:=true;
+             BuscarDNI:=i;
+           end
+         else
+           inc(i);
+      end;
+
+    end;
+    procedure cerrar;
+    begin
+      closeFile(fichero);
+    end;
+end.

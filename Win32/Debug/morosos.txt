@@ -1,0 +1,7 @@
+Socios que no han pagado
+1,Ana,1111
+2,Jose,2222
+3,Roberto,3333
+4,Rafael,4444
+
+Total 4 Socios

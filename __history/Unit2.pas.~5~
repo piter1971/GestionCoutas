@@ -1,0 +1,68 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TForm2 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    EditDNI: TEdit;
+    EditNombre: TEdit;
+    EditApellido: TEdit;
+    EditDireccion: TEdit;
+    EditTelefono: TEdit;
+    EditIngreso: TEdit;
+    CheckCuota: TCheckBox;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure limpiar;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form2: TForm2;
+
+implementation
+
+{$R *.dfm}
+uses contenedor;
+procedure TForm2.limpiar;
+begin
+  editDni.Clear;
+  editNombre.Clear;
+  editApellido.Clear;
+  editDireccion.Clear;
+  editTelefono.Clear;
+  editIngreso.Clear;
+  checkCuota.Checked:=false;
+end;
+procedure TForm2.BitBtn1Click(Sender: TObject);
+begin
+agenda[indice].DNI:=ShortString(editDNI.Text);
+agenda[indice].Nombre:=ShortString(editNombre.Text);
+agenda[indice].Apellido:=ShortString(editApellido.Text);
+agenda[indice].Direccion:=ShortString(editDireccion.Text);
+agenda[indice].Telefono:=ShortString(editTelefono.Text);
+agenda[indice].AnoIngreso:=strtoint(editIngreso.Text);
+agenda[indice].PagoCuota:=checkCuota.Checked;
+//agenda[indice]:=reg;
+inc(indice);
+//limpiar
+
+editDNI.SetFocus;
+ bitbtn1.Enabled:=false;
+end;
+
+end.

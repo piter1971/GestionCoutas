@@ -1,0 +1,19 @@
+unit contenedor;
+
+interface
+  type
+  DatosSocio=record
+    DNI:String[12];
+    Nombre:String[20];
+    Apellido:String[50];
+    Direccion:String[50];
+    Telefono:String[10];
+    AnoIngreso:word;
+    PagoCuota:boolean;
+  end;
+  var
+  agenda:array[1..10]of DatosSocio;
+  reg:DatosSocio;
+implementation
+
+end.
